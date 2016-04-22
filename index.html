@@ -1,1 +1,423 @@
-Hello galaxy
+<html>
+<head>
+<style>
+@font-face {
+  font-family: 'TOCODE';
+  src: url('tocode.ttf')  format('truetype');
+}
+h1,h2,h3,h4,h5,h6 {font-weight:normal;}
+body, input,button,pre {
+margin:0px; padding: 0px;
+font-family: TOCODE;
+font-smooth: never;
+-webkit-font-smoothing : none;
+-moz-osx-font-smoothing: unset;
+font-weight:normal !important;
+
+/*DISABLE SMOOTHING*/
+-webkit-filter: blur(0.0px);
+-moz-filter: blur(0.0px);
+-o-filter: blur(0.0px);
+-ms-filter: blur(0.0px);
+filter: blur(0.0px);
+
+}
+h1 {
+font-size: 32px;
+display:block;
+text-align:center;
+}
+span {
+font-size: 8px;
+}
+pre{background-color: #ffffff;text-align:center;border: 0px solid white; border-width: 32px 0px;position:relative;}
+p {
+font-size: 16px;
+}
+a { text-decoration:none;}
+.dont-break-out {
+
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+}
+
+
+/* Start of Column CSS */
+div.clear {
+    clear: both;
+} 
+#container2 {
+	clear:left;
+	float:left;
+	width:100%;
+	overflow:hidden;
+	background:#ffa7a7; /* column 2 background colour */
+}
+#container1 {
+	display:block;
+	float:left;
+	width:100%;
+	position:relative;
+	right:50%;
+	background:#fff689; /* column 1 background colour */
+}
+#col1 {
+	float:left;
+	width:48%;
+	position:relative;
+	left:51%;
+	overflow:hidden;
+}
+#col2 {
+	float:left;
+	width:48%;
+	position:relative;
+	left:53%;
+	overflow:hidden;
+}
+
+</style>
+<script>
+///// BEGIN LIB
+
+
+(function() {
+
+	// helper functions for that ctx
+	function write(buffer, offs) {
+		for (var i = 2; i < arguments.length; i++) {
+			for (var j = 0; j < arguments[i].length; j++) {
+				buffer[offs++] = arguments[i].charAt(j);
+			}
+		}
+	}
+
+	function byte2(w) {
+		return String.fromCharCode((w >> 8) & 255, w & 255);
+	}
+
+	function byte4(w) {
+		return String.fromCharCode((w >> 24) & 255, (w >> 16) & 255, (w >> 8) & 255, w & 255);
+	}
+
+	function byte2lsb(w) {
+		return String.fromCharCode(w & 255, (w >> 8) & 255);
+	}
+
+	window.PNGlib = function(width,height,depth) {
+
+		this.width   = width;
+		this.height  = height;
+		this.depth   = depth;
+
+		// pixel data and row filter identifier size
+		this.pix_size = height * (width + 1);
+
+		// deflate header, pix_size, block headers, adler32 checksum
+		this.data_size = 2 + this.pix_size + 5 * Math.floor((0xfffe + this.pix_size) / 0xffff) + 4;
+
+		// offsets and sizes of Png chunks
+		this.ihdr_offs = 0;									// IHDR offset and size
+		this.ihdr_size = 4 + 4 + 13 + 4;
+		this.plte_offs = this.ihdr_offs + this.ihdr_size;	// PLTE offset and size
+		this.plte_size = 4 + 4 + 3 * depth + 4;
+		this.trns_offs = this.plte_offs + this.plte_size;	// tRNS offset and size
+		this.trns_size = 4 + 4 + depth + 4;
+		this.idat_offs = this.trns_offs + this.trns_size;	// IDAT offset and size
+		this.idat_size = 4 + 4 + this.data_size + 4;
+		this.iend_offs = this.idat_offs + this.idat_size;	// IEND offset and size
+		this.iend_size = 4 + 4 + 4;
+		this.buffer_size  = this.iend_offs + this.iend_size;	// total PNG size
+
+		this.buffer  = new Array();
+		this.palette = new Object();
+		this.pindex  = 0;
+
+		var _crc32 = new Array();
+
+		// initialize buffer with zero bytes
+		for (var i = 0; i < this.buffer_size; i++) {
+			this.buffer[i] = "\x00";
+		}
+
+		// initialize non-zero elements
+		write(this.buffer, this.ihdr_offs, byte4(this.ihdr_size - 12), 'IHDR', byte4(width), byte4(height), "\x08\x03");
+		write(this.buffer, this.plte_offs, byte4(this.plte_size - 12), 'PLTE');
+		write(this.buffer, this.trns_offs, byte4(this.trns_size - 12), 'tRNS');
+		write(this.buffer, this.idat_offs, byte4(this.idat_size - 12), 'IDAT');
+		write(this.buffer, this.iend_offs, byte4(this.iend_size - 12), 'IEND');
+
+		// initialize deflate header
+		var header = ((8 + (7 << 4)) << 8) | (3 << 6);
+		header+= 31 - (header % 31);
+
+		write(this.buffer, this.idat_offs + 8, byte2(header));
+
+		// initialize deflate block headers
+		for (var i = 0; (i << 16) - 1 < this.pix_size; i++) {
+			var size, bits;
+			if (i + 0xffff < this.pix_size) {
+				size = 0xffff;
+				bits = "\x00";
+			} else {
+				size = this.pix_size - (i << 16) - i;
+				bits = "\x01";
+			}
+			write(this.buffer, this.idat_offs + 8 + 2 + (i << 16) + (i << 2), bits, byte2lsb(size), byte2lsb(~size));
+		}
+
+		/* Create crc32 lookup table */
+		for (var i = 0; i < 256; i++) {
+			var c = i;
+			for (var j = 0; j < 8; j++) {
+				if (c & 1) {
+					c = -306674912 ^ ((c >> 1) & 0x7fffffff);
+				} else {
+					c = (c >> 1) & 0x7fffffff;
+				}
+			}
+			_crc32[i] = c;
+		}
+
+		// compute the index into a png for a given pixel
+		this.index = function(x,y) {
+			var i = y * (this.width + 1) + x + 1;
+			var j = this.idat_offs + 8 + 2 + 5 * Math.floor((i / 0xffff) + 1) + i;
+			return j;
+		}
+
+		// convert a color and build up the palette
+		this.color = function(red, green, blue, alpha) {
+
+			alpha = alpha >= 0 ? alpha : 255;
+			var color = (((((alpha << 8) | red) << 8) | green) << 8) | blue;
+
+			if (typeof this.palette[color] == "undefined") {
+				if (this.pindex == this.depth) return "\x00";
+
+				var ndx = this.plte_offs + 8 + 3 * this.pindex;
+
+				this.buffer[ndx + 0] = String.fromCharCode(red);
+				this.buffer[ndx + 1] = String.fromCharCode(green);
+				this.buffer[ndx + 2] = String.fromCharCode(blue);
+				this.buffer[this.trns_offs+8+this.pindex] = String.fromCharCode(alpha);
+
+				this.palette[color] = String.fromCharCode(this.pindex++);
+			}
+			return this.palette[color];
+		}
+
+		// output a PNG string, Base64 encoded
+		this.getBase64 = function() {
+
+			var s = this.getDump();
+
+			var ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+			var c1, c2, c3, e1, e2, e3, e4;
+			var l = s.length;
+			var i = 0;
+			var r = "";
+
+			do {
+				c1 = s.charCodeAt(i);
+				e1 = c1 >> 2;
+				c2 = s.charCodeAt(i+1);
+				e2 = ((c1 & 3) << 4) | (c2 >> 4);
+				c3 = s.charCodeAt(i+2);
+				if (l < i+2) { e3 = 64; } else { e3 = ((c2 & 0xf) << 2) | (c3 >> 6); }
+				if (l < i+3) { e4 = 64; } else { e4 = c3 & 0x3f; }
+				r+= ch.charAt(e1) + ch.charAt(e2) + ch.charAt(e3) + ch.charAt(e4);
+			} while ((i+= 3) < l);
+			return r;
+		}
+
+		// output a PNG string
+		this.getDump = function() {
+
+			// compute adler32 of output pixels + row filter bytes
+			var BASE = 65521; /* largest prime smaller than 65536 */
+			var NMAX = 5552;  /* NMAX is the largest n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1 */
+			var s1 = 1;
+			var s2 = 0;
+			var n = NMAX;
+
+			for (var y = 0; y < this.height; y++) {
+				for (var x = -1; x < this.width; x++) {
+					s1+= this.buffer[this.index(x, y)].charCodeAt(0);
+					s2+= s1;
+					if ((n-= 1) == 0) {
+						s1%= BASE;
+						s2%= BASE;
+						n = NMAX;
+					}
+				}
+			}
+			s1%= BASE;
+			s2%= BASE;
+			write(this.buffer, this.idat_offs + this.idat_size - 8, byte4((s2 << 16) | s1));
+
+			// compute crc32 of the PNG chunks
+			function crc32(png, offs, size) {
+				var crc = -1;
+				for (var i = 4; i < size-4; i += 1) {
+					crc = _crc32[(crc ^ png[offs+i].charCodeAt(0)) & 0xff] ^ ((crc >> 8) & 0x00ffffff);
+				}
+				write(png, offs+size-4, byte4(crc ^ -1));
+			}
+
+			crc32(this.buffer, this.ihdr_offs, this.ihdr_size);
+			crc32(this.buffer, this.plte_offs, this.plte_size);
+			crc32(this.buffer, this.trns_offs, this.trns_size);
+			crc32(this.buffer, this.idat_offs, this.idat_size);
+			crc32(this.buffer, this.iend_offs, this.iend_size);
+
+			// convert PNG to string
+			return "\211PNG\r\n\032\n"+this.buffer.join('');
+		}
+	}
+
+})();
+
+///// END LIB
+
+
+
+function upd8(t) {
+var string = t[0].value;
+var len = string.length;
+string = string.replace(/[&]/g,"&amp;");
+string = string.replace(/[<]/g,"&lt;");
+if (len > 42) {
+string = string.substring(0,42);
+}
+while (len < 22) {
+string = "&#9646;"+string+"&#9646;";
+len += 2;
+}
+
+
+var v = "&#9635;"+string+"&#9635;";
+
+document.getElementById("txtbig").innerHTML = v;
+document.getElementById("txtmed").innerHTML = v;
+document.getElementById("txtsml").innerHTML = v;
+//	alert("done");
+return false;
+}
+
+</script>
+</head>
+<body>
+<div class="clear"></div>
+  <h1 class="dont-break-out">&#9635;Welcome to the Text Oriented Code Website&#9635;</h1>
+
+<blockquote>
+What is TO code? A 22-42 characters you can Copy, Read And Paste easily! Allow yourself
+the luxury of being able to copy a fully machine readable code over a chat, e-mail or the web. No more manually
+typing your website address, phone number or other identifier. this code is truly the
+best thing since sliced bread. Still not convinced? Try it yourself!
+
+		<form onsubmit="javascript:return upd8(this);" action="#" method="POST">
+			<input id="srch" style="font-size:24px;"  size="42" type="search" name="s" placeholder="Create your code...">
+			<button style="font-size:24px;width:6em;" > Show </button>
+			<button style="font-size:24px;width:6em;" > Random </button>
+		</form>
+</blockquote>
+
+
+<div id="container2">
+	<div id="container1">
+		<div id="col1">
+			<!-- Column one start -->
+
+			<h2>Legacy Image, Cannot Select or Copy Code:</h2>
+
+<img id="imgbig" alt="Loading..." height="100" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=" width="100%" /><br /><br />
+<img id="imgmed" alt="Loading..." height="100" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=" width="100%" /><br /><br />
+<img id="imgsml" alt="Loading..." height="100" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=" width="100%" /><br /><br />
+<!--
+			<h2>Equal height columns</h2>
+			<p>It does not matter how much content is in each column, the background colours will always stretch down to the height of the tallest column.</p>
+			<h2>2 Column Dimensions</h2>
+			<p>Each column is 50 percent wide with 2 percent padding on each side.</p>
+			<h2>No CSS hacks</h2>
+			<p>The CSS used for this 2 column layout is 100% valid and hack free. To overcome Internet Explorer's broken box model, no horizontal padding or margins are used. Instead, this design uses percentage widths and clever relative positioning.</p>
+			<h2>No Images</h2>
+			<p>This Two column layout requires no images. Many CSS website designs need images to colour in the column backgrounds but that is not necessary with this design. Why waste bandwidth and precious HTTP requests when you can do everything in pure CSS and HTML?</p>
+			<h2>No JavaScript</h2>
+			<p>JavaScript is not required. Some website layouts rely on JavaScript hacks to resize divs and force elements into place but you won't see any of that nonsense here.</p>
+			<h2>This code is FREE for anyone to use</h2>
+			<p>You don't have to pay anything. Simply download the font from this page.
+		If you are feeling generous however, donate a beer amount back to this page to
+		recover a domain cost, and honor the developer effort that went into this.</p>
+			<!-- Column one end -->
+		</div>
+		<div id="col2">
+			<!-- Column two start -->
+			<h2>Text Formatted Copy Read And Paste Code:</h2>
+
+ <pre id="txtbig" style="font-size:24px;">&#9635;&#9635;</pre><br />
+ <pre id="txtmed" style="font-size:16px;">&#9635;&#9635;</pre><br />
+ <pre id="txtsml" style="font-size:8px;">&#9635;&#9635;</pre><br />
+
+<!--
+			<h2>Cross-Browser Compatible</h2>
+			<p>This 2 column layout has been tested on the following browsers:</p>
+			<h3>iPhone &amp; iPod Touch</h3>
+			<ul>
+				<li>Safari</li>
+			</ul>
+			<h3>Mac</h3>
+			<ul>
+				<li>Safari</li>
+				<li>Firefox</li>
+				<li>Opera 9</li>
+				<li>Netscape 7 &amp; 9</li>
+			</ul>
+			<h3>Windows</h3>
+			<ul>
+				<li>Firefox 1.5, 2 &amp; 3</li>
+				<li>Safari</li>
+				<li>Opera 8 &amp; 9</li>
+				<li>Explorer 5.5, 6 &amp; 7</li>
+				<li>Google Chrome</li>
+				<li>Netscape 8</li>
+			</ul>
+			<h2>Valid XHTML strict markup</h2>
+			<p>The HTML in this layout validates as XHTML 1.0 strict.</p>
+
+			<!-- Column two end -->
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+
+<!--
+<blockquote>
+
+If one examines the cultural paradigm of narrative, one isn't faced with a
+choice: either accept surrealism or conclude that government is intrinsically
+unattainable. The subject is interpolated into a postdialectic theory that
+includes culture as a reality: (facts). It could be said that any number of
+deappropriations concerning the fatal flaw, & thus the genre, of cultural
+class may be revealed. 
+Pack my box with five dozen liquor jugs. Jackdaws love my "big" sphinx of quartz.
+The five boxing wizards jump quickly. How vexingly quick daft zebras jump!
+Bright vixens jump; dozy fowl quack.
+#$%*+-/0123456789<=>?@[\]^_`{|}~
+
+</blockquote>
+-->
+
+<a class="dont-break-out" href="http://movedon2otherthings.github.io/i.htm"><h1>&#9635;http://movedon2otherthings.github.io/i.htm&#9635;</h1></a>
+    
+</body>
+</html>
