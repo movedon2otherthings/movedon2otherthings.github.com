@@ -2,8 +2,15 @@
 <head>
 <style>
 @font-face {
-  font-family: 'TOCODE';
-  src: url('tocode.ttf')  format('truetype');
+    font-family: 'TOCODE';
+    src: url('tocode-webfont.eot');
+    src: url('tocode-webfont.eot?#iefix') format('embedded-opentype'),
+         url('tocode-webfont.woff2') format('woff2'),
+         url('tocode-webfont.woff') format('woff'),
+         url('tocode-webfont.ttf') format('truetype'),
+         url('tocode-webfont.svg#craptestmedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 h1,h2,h3,h4,h5,h6 {font-weight:normal;}
 body, input,button,pre {
@@ -93,6 +100,10 @@ min-height:64px;
 .app > div {
 border-top: 12px solid transparent;
 border-left: 64px solid transparent;
+}
+/***Midori Border*********/
+form, input, button {
+	border: 1px solid black;
 }
 </style>
 <script>
