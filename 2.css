@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'tocode001regular';
+    src: url('tocode-webfont.eot');
+    src: url('tocode-webfont.eot?#iefix') format('embedded-opentype'),
+         url('tocode-webfont.woff2') format('woff2'),
+         url('tocode-webfont.woff') format('woff'),
+         url('tocode-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+* {
+	font-family: tocode001regular !important;
+-webkit-filter: blur(0.0px);
+-moz-filter: blur(0.0px);
+-o-filter: blur(0.0px);
+
+}
+
+body {
+	font-family: tocode001regular !important;
+-webkit-filter: blur(0.0px);
+-moz-filter: blur(0.0px);
+-o-filter: blur(0.0px);
+
+}
