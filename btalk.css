@@ -1,0 +1,10 @@
+@font-face{font-family:tocode001regular;
+src:url(http://www.2c0.de/tocode-webfont.eot);
+src:url(http://www.2c0.de/tocode-webfont.eot?#iefix)
+format('embedded-opentype'),
+url(http://www.2c0.de/tocode-webfont.woff2) format('woff2'),
+url(http://www.2c0.de/tocode-webfont.woff) format('woff'),
+url(http://www.2c0.de/tocode-webfont.ttf) format('truetype');
+font-weight:400;font-style:normal}
+div .post>span>span{font-family:Tocode001,tocode001regular,tocode!important;
+font-weight:400;font-style:normal;background-color:#fff;font-size:16px}
