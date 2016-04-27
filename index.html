@@ -136,8 +136,8 @@ font-family: tocode001regular;
 font-size: 8px;
 }
 /*fix the win7 ie10 right font cutoff*/
-::-ms-clear {
-display: none;
+input::-ms-clear {
+  display: none;
 }
 
 </style>
@@ -347,7 +347,7 @@ display: none;
 var clicked;
 
 function upd8(t) {
-alert(clicked);
+//	alert(clicked);
 
 var stri = t[0].value;
 var len = stri.length;
