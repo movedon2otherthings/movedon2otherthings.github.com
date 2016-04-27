@@ -104,17 +104,34 @@ form {
 	border: 0px solid;
 }
 input {
-width: 70%;
-border: 2px solid;
-}
-button {
 width: 10%;
 border: 2px solid;
 }
+input#srch {
+width: 70%;
+border: 2px solid;
+line-height: normal;
+}
 /***********************/
-#txtbig , #txtmed , #txtsml , .quiet {
+#txtbig , #txtmed  , #txtsml ,  .quiet {
 text-align:center;;position:relative;
 border: 0px solid white; border-width: 32px 0px;
+}
+#txtbig, #txtmed , #txtsml {
+font-size:4px;
+font-family:serif;
+}
+#txtbig span {
+font-family: tocode001regular;
+font-size: 24px;
+}
+#txtmed span {
+font-family: tocode001regular;
+font-size: 16px;
+}
+#txtsml span,  .quiet span {
+font-family: tocode001regular;
+font-size: 8px;
 }
 
 </style>
@@ -321,9 +338,10 @@ border: 0px solid white; border-width: 32px 0px;
 
 ///// END LIB
 
-
+var clicked;
 
 function upd8(t) {
+alert(clicked);
 
 var stri = t[0].value;
 var len = stri.length;
@@ -365,6 +383,13 @@ len += 2;
 
 var v = "&#9635;"+string+"&#9635;";
 
+if (clicked == 1) {
+v = "`<span>" + v + "</span>`";
+}
+if (clicked == 2) {
+v = "[size=16px][font=tocode001regular,tocode001,tocode]<span>" + v + "</span>[/font][/size]";
+}
+
 document.getElementById("txtbig").innerHTML = v;
 document.getElementById("txtmed").innerHTML = v;
 document.getElementById("txtsml").innerHTML = v;
@@ -388,9 +413,9 @@ typing your website address, phone number or other identifier. this code is trul
 best thing since sliced bread. Still not convinced? Try it yourself!
 
 		<form onsubmit="javascript:return upd8(this);" action="#" method="POST">
-			<input id="srch" style="font-size:24px;"  size="42" type="search" name="s" placeholder="Create your code...">
-			<button style="font-size:24px;" > Show </button>
-			<button style="font-size:24px;" > Random </button>
+			<input id="srch" style="font-size:24px;"  size="42" type="search" name="s" placeholder="Create your code..." value="MpqyjM">
+			<input onclick="javascript:clicked=1;" style="font-size:24px;" name="redd" type="submit" value="Redd.it" />
+			<input onclick="javascript:clicked=2;" style="font-size:24px;" name="btlk" type="submit" value="Btalk" />
 		</form>
 </blockquote>
 
@@ -447,9 +472,9 @@ best thing since sliced bread. Still not convinced? Try it yourself!
 			<!-- Column two start -->
 			<h2>Text Formatted Copy Read And Paste Code:</h2>
 
- <pre id="txtbig" style="font-size:24px;">&#9635;&#9635;</pre><br />
- <pre id="txtmed" style="font-size:16px;">&#9635;&#9635;</pre><br />
- <pre id="txtsml" style="font-size:8px;">&#9635;&#9635;</pre><br />
+ <pre id="txtbig"><span>&#9635;&#9635;</span></pre><br />
+ <pre id="txtmed"><span>&#9635;&#9635;</span></pre><br />
+ <pre id="txtsml"><span>&#9635;&#9635;</span></pre><br />
 
 			<h2>Add code to your website, forum or chat!</h2>
 
@@ -499,7 +524,7 @@ Download the fonts and make sure they're accessible!
 Download the Phone App!
 
 			<h2>Questions?</h2>
- <pre class="quiet" style="font-size:8px;">&#9635;&#65357;&#65359;&#65366;&#65349;&#65348;&#65359;&#65358;&#65298;&#65359;&#65364;&#65352;&#65349;&#65362;&#65364;&#65352;&#65353;&#65358;&#65351;&#65363;&#65312;&#65360;&#65362;&#65359;&#65364;&#65359;&#65358;&#65357;&#65345;&#65353;&#65356;&#65294;&#65347;&#65359;&#65357;&#9635;</pre><br />
+ <pre class="quiet" style="font-size:8px;"><span>&#9635;&#65357;&#65359;&#65366;&#65349;&#65348;&#65359;&#65358;&#65298;&#65359;&#65364;&#65352;&#65349;&#65362;&#65364;&#65352;&#65353;&#65358;&#65351;&#65363;&#65312;&#65360;&#65362;&#65359;&#65364;&#65359;&#65358;&#65357;&#65345;&#65353;&#65356;&#65294;&#65347;&#65359;&#65357;&#9635;</span></pre><br />
   
 
 <!--
