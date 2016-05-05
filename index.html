@@ -3,7 +3,7 @@
 <head>
 <style>
 @font-face {
-    font-family: 'tocode001regular';
+    font-family: 'tocode002regular';
     src: url('tocode-webfont.eot');
     src: url('tocode-webfont.eot?#iefix') format('embedded-opentype'),
          url('tocode-webfont.woff2') format('woff2'),
@@ -18,7 +18,7 @@ h4 {font-size: 200%;margin:0;padding:0;}
 div.demo > h4 {font-size:24px;}
 body, button,pre,div.demo {
 margin:0px; padding: 0px;
-font-family: tocode001regular !important;
+font-family: tocode002regular !important;
 
 
 font-weight:normal !important;
@@ -125,15 +125,15 @@ font-size:8px;
 font-family:serif;
 }
 #txtbig span {
-font-family: tocode001regular;
+font-family: tocode002regular;
 font-size: 24px;
 }
 #txtmed span {
-font-family: tocode001regular;
+font-family: tocode002regular;
 font-size: 16px;
 }
 #txtsml span,  .quiet span {
-font-family: tocode001regular;
+font-family: tocode002regular;
 font-size: 8px;
 }
 
@@ -358,14 +358,17 @@ for (var i = 0; i < len; i++) {
 
 switch(val) {
     case 38:
-        string += "&amp;"
+        string += "&amp;";
         break;
     case 32:
-        string += "&nbsp;"
+        string += "&nbsp;";
         break;
     case 60:
-        string += "&lt;"
+        string += "&lt;";
         break;
+    case 9646:// black rectangle to output
+        string += "&#9646;";
+		break;
     case 9647:// white rectangle terminates decoding
 	i = len;
     default:
@@ -394,7 +397,7 @@ if (clicked == 1) {
 v = "`<span>" + v + "</span>`";
 }
 if (clicked == 2) {
-v = "[size=16px][font=tocode001regular,tocode001,tocode]<span>" + v + "</span>[/font][/size]";
+v = "[size=16px][font=tocode002regular,tocode002,tocode]<span>" + v + "</span>[/font][/size]";
 }
 
 document.getElementById("txtbig").innerHTML = v;
@@ -482,7 +485,7 @@ best thing since sliced bread. Still not convinced? Try it yourself!
 
 
 @font-face {
-    font-family: "tocode001regular";
+    font-family: "tocode002regular";
     src: url('tocode-webfont.eot');
     src: url('tocode-webfont.eot?#iefix')
          format('embedded-opentype'),
@@ -495,7 +498,7 @@ best thing since sliced bread. Still not convinced? Try it yourself!
 
 post {
 
-	font-family: tocode001regular;
+	font-family: tocode002regular;
 	font-size: 16px;
 	-webkit-filter: blur(0.0px);
 	-moz-filter: blur(0.0px);
