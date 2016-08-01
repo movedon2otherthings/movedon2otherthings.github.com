@@ -22,10 +22,12 @@ font-family: tocode002regular !important;
 
 
 font-weight:normal !important;
-
+text-rendering: geometricPrecision !important;
 font-smooth: never;
 -webkit-font-smoothing : none;
 -moz-osx-font-smoothing: unset;
+
+
 -webkit-filter: blur(0.0px);
 -moz-filter: blur(0.0px);
 -o-filter: blur(0.0px);
@@ -117,22 +119,27 @@ width: 70%;
 }
 /***********************/
 #txtbig , #txtmed  , #txtsml ,  .quiet {
-text-align:center;;position:relative;
-border: 0px solid white; border-width: 32px 0px;
+/*text-align:center;*/
+/*;position:relative;*/
+border: 0px solid white;
+border-width: 32px 0px;
+padding-left: 16px;
+
 }
 #txtbig, #txtmed , #txtsml {
 font-size:8px;
 font-family:serif;
+
 }
 #txtbig span {
 font-family: tocode002regular;
 font-size: 24px;
 }
-#txtmed span {
+#txtmed span,  .quiet span {
 font-family: tocode002regular;
 font-size: 16px;
 }
-#txtsml span,  .quiet span {
+#txtsml span {
 font-family: tocode002regular;
 font-size: 8px;
 }
@@ -140,9 +147,11 @@ font-size: 8px;
 #imgbig, #imgmed, #imgsml {
 height: 100px;
 }
+/*
 #col1 > pre {
 text-align:center;
 }
+*/
 </style>
 <script>
 ///// BEGIN LIB
@@ -474,10 +483,14 @@ len += 2;
 var v = "&#9635;"+string+"&#9635;";
 
 if (clicked == 1) {
-v = "`<span>" + v + "</span>`";
+// oh god please make text nonsubpixeled
+//	v = "`<span>" + v + "</span>`";
+v = "<span>" + v + "</span>";
 }
 if (clicked == 2) {
-v = "[size=16px][font=tocode002regular,tocode002,tocode]<span>" + v + "</span>[/font][/size]";
+
+//	v = "[size=16px][font=tocode002regular,tocode002,tocode]<span>" + v + "</span>[/font][/size]";
+v = "<span>" + v + "</span>";
 }
 
 document.getElementById("txtbig").innerHTML = v;
@@ -524,10 +537,7 @@ return false;
   <h1 class="dont-break-out">&#9635;&#65335;&#65349;&#65356;&#65347;&#65359;&#65357;&#65349;&nbsp;&#65364;&#65359;&nbsp;&#65364;&#65352;&#65349;&nbsp;&#65332;&#65349;&#65368;&#65364;&nbsp;&#65327;&#65362;&#65353;&#65349;&#65358;&#65364;&#65349;&#65348;&nbsp;&#65315;&#65359;&#65348;&#65349;&nbsp;&#65335;&#65349;&#65346;&#65363;&#65353;&#65364;&#65349;&#9635;</h1>
 
 <blockquote>
-What is TO code? A 22-42 characters you can Copy, Read And Paste easily! Allow yourself
-the luxury of being able to copy a fully machine readable code over a chat, e-mail or the web. No more manually
-typing your website address, phone number or other identifier. this code is truly the
-best thing since sliced bread. Still not convinced? Try it yourself!
+Create your TO code! Type a coin address, email or web site to create a custom copyable or scanneable image code!
 
 		<form onsubmit="javascript:return upd8(this);" action="#" method="POST">
 			<input id="srch" style="font-size:24px;"  size="42" type="search" name="s" placeholder="Create your code..." />
@@ -538,14 +548,21 @@ best thing since sliced bread. Still not convinced? Try it yourself!
 
 
 <div id="container2">
+
+<div style="width:50%;	background:#fff689;float:left;">
+			<h2> &nbsp; Text Formatted Copy Read And Paste Code:</h2>
+ <pre id="txtbig"><span>&#9635;&#9635;</span></pre><br />
+ <pre id="txtmed"><span>&#9635;&#9635;</span></pre><br />
+ <pre id="txtsml"><span>&#9635;&#9635;</span></pre><br />
+</div>
+
 <div id="container1">
+
 <div id="col1">
 
 
-			<h2>Legacy Image, Cannot Select or Copy Code:</h2>
 
-<pre><img id="imgmed" alt="Loading..." height="100" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=" /></pre><br /><br />
-<pre><img id="imgsml" alt="Loading..." height="100" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=" /></pre><br /><br />
+
 
 
 			<h2>Download the Phone App! Version 0.0.3 out!</h2>
@@ -564,27 +581,20 @@ best thing since sliced bread. Still not convinced? Try it yourself!
 <a href="tocode-webfont.woff2"><div class="app"><div>tocode-webfont.woff2<br> 9 KB </div></div></a>
 
 
-
-<br />
-
-			<h2>This code is FREE for anyone to use</h2>
-			<p>You don't have to pay anything. Simply download the font from this page.
-		If you are feeling generous however, donate a beer amount back to this page to
-		recover a domain cost, and honor the developer effort that went into this.</p>
-
-			<h2>Donate.</h2>
- <pre  class="quiet" style="font-size:8px;">&#9635;&#65297;&#65332;&#65359;&#65347;&#65359;&#65348;&#65349;&#65336;&#65333;&#65322;&#65335;&#65349;&#65363;&#65318;&#65320;&#65297;&#65318;&#65324;&#65299;&#65300;&#65353;&#65361;&#65349;&#65358;&#65325;&#65370;&#65329;&#65335;&#65345;&#65314;&#65297;&#65305;&#65365;&#9635;</pre><br />
-  
-
+	
 
 </div>
-<div id="col2">
+<div id="col2" style="top: -320px !important;">
 
-			<h2>Text Formatted Copy Read And Paste Code:</h2>
 
- <pre id="txtbig"><span>&#9635;&#9635;</span></pre><br />
- <pre id="txtmed"><span>&#9635;&#9635;</span></pre><br />
- <pre id="txtsml"><span>&#9635;&#9635;</span></pre><br />
+
+			<h2>Legacy Image, Cannot Select or Copy Code:</h2>
+
+<pre><img id="imgmed" alt="Loading..." height="100" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=" /></pre><br /><br />
+<pre><img id="imgsml" alt="Loading..." height="100" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=" /></pre><br /><br />
+
+
+
 
 			<h2>Add code to your website, forum or chat!</h2>
 
@@ -635,14 +645,49 @@ Download the fonts and make sure they're accessible!
 <br />
 &lt;post&gt;<span id="txthtml">hello text code!</span>&lt;/post&gt;<br />
 </code></div>
-Download the Phone App!
 
-			<h2>Questions?</h2>
- <pre class="quiet" style="font-size:8px;"><span>&#9635;&#65357;&#65359;&#65366;&#65349;&#65348;&#65359;&#65358;&#65298;&#65359;&#65364;&#65352;&#65349;&#65362;&#65364;&#65352;&#65353;&#65358;&#65351;&#65363;&#65312;&#65360;&#65362;&#65359;&#65364;&#65359;&#65358;&#65357;&#65345;&#65353;&#65356;&#65294;&#65347;&#65359;&#65357;&#9635;</span></pre><br />
+
+
+<br />
+
+			<h2>This code is FREE for anyone to use</h2>
+			<p>You don't have to pay anything. Simply download the font from this page.
+		If you are feeling generous however, donate a beer amount back to this page to
+		recover a domain cost, and honor the developer effort that went into this.</p>
+
+
+
+
+
+
+
+		<h2>Questions?</h2>
+ <pre class="quiet"><img width="10" /><span>&#9635;&#65357;&#65359;&#65366;&#65349;&#65348;&#65359;&#65358;&#65298;&#65359;&#65364;&#65352;&#65349;&#65362;&#65364;&#65352;&#65353;&#65358;&#65351;&#65363;&#65312;&#65360;&#65362;&#65359;&#65364;&#65359;&#65358;&#65357;&#65345;&#65353;&#65356;&#65294;&#65347;&#65359;&#65357;&#9635;&nbsp;</span></pre><br />
   
+
+
 
 		</div>
 	</div>
+
+<!--
+
+<div style="width:50%;	background:#fff689; ">
+
+
+
+
+			<h2> &nbsp; Donate.</h2>
+
+   <pre  class="quiet">&#9635;&#65297;&#65332;&#65359;&#65347;&#65359;&#65348;&#65349;&#65336;&#65333;&#65322;&#65335;&#65349;&#65363;&#65318;&#65320;&#65297;&#65318;&#65324;&#65299;&#65300;&#65353;&#65361;&#65349;&#65358;&#65325;&#65370;&#65329;&#65335;&#65345;&#65314;&#65297;&#65305;&#65365;&#9646;&#9635;</pre><br />
+
+
+
+
+
+</div>
+-->
+
 </div>
 <div class="clear"></div>
 
