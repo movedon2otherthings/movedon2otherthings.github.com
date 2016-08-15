@@ -388,18 +388,24 @@ var bfont = [
 
 
 function render(p, x, y, k, z, w) {
+var row = ""
 var u = 3-z
 for (var i = 0; i < w/u; i++) {
 	for (var j = 0; j < 8*z; j++) {
-		var v = false
+		var v = 0
 		for (var m = 0; m < u; m++) {
 			for (var n = 0; n < u; n++) {
-		v = v || bfont[(u*j+m)%16][u*i+k+n]=='+';
+		if (bfont[(u*j+m)%16][u*i+k+n]=='+')
+			v++
 		}}
-		if (v) {
+		if (v>=(u*u/2)) {
+			row += "."
 			p.buffer[p.index(i + x, j + y)] = p.color(0x00, 0x00, 0x00);
+		} else {
+			row += "+"
 		}
 }}
+return row
 }
 
 ///////////
@@ -510,17 +516,22 @@ var imgid = ["imgmed","imgsml"];
 
 //	var string = "1F9FznjhmHYF4zBCgCWh9vzCYhvycgiFUJ"
 
+var data = ""
+
 for (var i = 0; i < 2; i++) {
+data = ""
 
 var p = new PNGlib(400, 100, 256); // construcor takes height, weight and color-depth
 var background = p.color(255, 255, 255, 255); // set the background transparent
 
-render(p, 80*i+29+(8*i), 50, 940,2-i,14);
-render(p, 80*i+29+356+(-170*i), 50, 940,2-i,14);
+data += render(p, 80*i+29+(8*i), 50, 940,2-i,14);
+data += "++++++++";
+
 for (var x = 0; x < 34; x++){
 var o = stringimg.charCodeAt(x)-33
-render(p, 80*i+29+16+x*5*(2-i), 50, 10*o,2-i,10)
+data += render(p, 80*i+29+16+x*5*(2-i), 50, 10*o,2-i,10)
 }
+data += render(p, 80*i+29+356+(-170*i), 50, 940,2-i,14);
 
 
 var base64 = "data:image/png;base64,"+p.getBase64();
@@ -529,7 +540,54 @@ document.getElementById(imgid[i]).src = base64;
 
 
 }
+// forumer processing
+var lt = ["+","+","+","+","+","+","+","+","+"]
+while (data.length > 0){
+for (var i = 0; i < 8; i++) {
+	lt[i] += data.charAt(0)
+	data = data.substring(1);
+	if (data.length ==0)
+		break;
+}}
+// forumer tail
+	document.getElementById('txtforum').value = "";
+for (var y = 0; y < 8; y++) {
+	document.getElementById('txtforum').value += "\n[size=2pt][glow=white,2,300]";
 
+var cnt = 0
+var toggle = false
+for (var x = 0; x < 185; x++) {
+
+if (lt[y][x] == lt[y][x+1]) {
+	document.getElementById('txtforum').value += ".";
+	cnt++
+	if (cnt == 5) {
+		cnt = 0;
+		if (!toggle)
+			document.getElementById('txtforum').value += "[/glow][glow=white,2,300]";
+//		if (toggle)
+//			document.getElementById('txtforum').value += "[/glow][glow=black,2,300]";
+	}
+ continue;
+}
+
+if (!toggle)
+	document.getElementById('txtforum').value += "[glow=black,2,300].";
+if (toggle)
+	document.getElementById('txtforum').value += "[/glow].";
+
+toggle = !toggle;
+
+}
+if (toggle)
+	document.getElementById('txtforum').value += "[/glow]";
+
+	document.getElementById('txtforum').value += "[/glow][/size]";
+
+}
+	document.getElementById('txtforum').value += 
+"\n[size=2pt][color=white][glow=white,2,300][glow=white,2,300].......[/glow]...[glow=white,2,300].[/glow]...[glow=white,2,300].[/glow]....[glow=white,2,300]..[/glow]...[glow=white,2,300]...[/glow]..[glow=white,2,300]..[/glow]...[glow=white,2,300]...[/glow]..[glow=white,2,300]...[/glow].[glow=white,2,300].[/glow]..[glow=white,2,300].[/glow]..[glow=white,2,300]..[/glow]...[glow=white,2,300]..[/glow]..[glow=white,2,300].[/glow]..[glow=white,2,300].[/glow]..[glow=white,2,300]...[/glow].[glow=white,2,300]...[/glow]..[glow=white,2,300].[/glow]....[glow=white,2,300].[/glow]..[glow=white,2,300].[/glow]...[glow=white,2,300].[/glow]..[glow=white,2,300].[/glow]....[glow=white,2,300]....[/glow].[glow=white,2,300]...[/glow]....[glow=white,2,300].[/glow]...[glow=white,2,300]...[/glow]....[glow=white,2,300].[/glow]..[glow=white,2,300]...[/glow].[glow=white,2,300].[/glow]..[glow=white,2,300].[/glow].[glow=white,2,300].[/glow]..[glow=white,2,300].[/glow].[glow=white,2,300]....[/glow]..[glow=white,2,300].[/glow].[glow=white,2,300].[/glow].[glow=white,2,300].[/glow]..[glow=white,2,300].[/glow]..[glow=white,2,300]...[/glow].[glow=white,2,300]...[/glow]....[glow=white,2,300].[/glow]...[glow=white,2,300]..[/glow]...[glow=white,2,300]...[/glow].[glow=white,2,300]....[/glow].[glow=white,2,300].......[/glow][/glow][/color][/size]";
+//	alert(lt[2]);
 //	alert(v);
 //	alert("done");
 return false;
@@ -566,6 +624,11 @@ Create your TO code! Type a coin address, email or web site to create a custom c
 
 <div id="col1">
 
+
+			<h2>Copyable Forum Code.</h2>
+
+
+<textarea style="width:80%" id="txtforum"></textarea>
 
 
 			<h2>Get the Phone App! Version 0.0.6 out!</h2>
