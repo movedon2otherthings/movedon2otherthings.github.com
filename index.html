@@ -590,9 +590,110 @@ if (toggle)
 //	alert(lt[2]);
 //	alert(v);
 //	alert("done");
-return false;
+
+
+// Begin steem code creation
+
+var newline = getLS();
+
+
+	document.getElementById('txtsteem').value +=(newline+"<br><br>");
+for (var y = 0; y+1 < lt.length; y++) {
+	document.getElementById('txtsteem').value +=(newline+"##### <sup><pre><sup><p>");
+
+
+
+for (var x = 0; x < 206; x++) {
+var putchar = "&nbsp;";
+
+
+
+
+
+if (lt[y][x+1] == '.') {
+if (lt[y][x+0] == '.') {
+putchar = "UU";
+} else {
+putchar = "UR"
+}
+} else {
+if (lt[y][x+0] == '.') {
+
+putchar = "UL"
+
+}
 }
 
+
+if (lt[y+1][x+1] == '.') {
+if (lt[y+1][x+0] == '.') {
+
+if (putchar == "&nbsp;") {
+putchar = String.fromCharCode(9604);
+} else if (putchar == "UU") {
+putchar = String.fromCharCode(9608);
+} else if (putchar == "UR") {
+putchar = String.fromCharCode(9631);
+} else if (putchar == "UL") {
+putchar = String.fromCharCode(9625);
+}
+
+} else {
+if (putchar == "&nbsp;") {
+putchar = String.fromCharCode(9623);
+} else if (putchar == "UU") {
+putchar = String.fromCharCode(9628);
+} else if (putchar == "UR") {
+putchar = String.fromCharCode(9616);
+} else if (putchar == "UL") {
+putchar = String.fromCharCode(9626);
+}
+}
+} else {
+if (lt[y+1][x+0] == '.') {
+if (putchar == "&nbsp;") {
+putchar = String.fromCharCode(9622);
+} else if (putchar == "UU") {
+putchar = String.fromCharCode(9627);
+} else if (putchar == "UR") {
+putchar = String.fromCharCode(9630);
+} else if (putchar == "UL") {
+putchar = String.fromCharCode(9612);
+}
+
+}
+}
+
+if (putchar == "&nbsp;") {
+putchar = " ";
+} else if (putchar == "UU") {
+putchar = String.fromCharCode(9600);
+} else if (putchar == "UR") {
+putchar = String.fromCharCode(9629);
+} else if (putchar == "UL") {
+putchar = String.fromCharCode(9624);
+}
+
+
+x++;
+
+
+	document.getElementById('txtsteem').value +=(putchar);
+
+}
+y++;
+
+	document.getElementById('txtsteem').value +=(newline+"#####");
+}
+	document.getElementById('txtsteem').value +=(newline+"</pre></sup>");
+
+return false;
+}
+function getLS() {
+  var textarea = document.createElement("textarea");
+  textarea.value = "\n"; 
+  return textarea.value;
+}
 </script>
 <title>&#9635;Welcome to the Text Oriented Code Website&#9635;</title>
 </head>
@@ -629,7 +730,12 @@ Create your TO code! Type a coin address, email or web site to create a custom c
 
 
 <textarea style="width:80%" id="txtforum"></textarea>
-	
+
+
+				<h2>Copyable Steem Comment Code.</h2>
+
+
+<textarea style="width:80%" id="txtsteem"></textarea>
 	
 			<h2>Get the Phone App! Version 0.0.7 is finished!</h2>
 
